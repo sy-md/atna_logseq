@@ -1,41 +1,35 @@
-import os, time
+import os
+import time
+import shutil
+import logging as lg
+
 block = "\n- "
-page_ref = "[[{}]]"
-#####################################################
-
-# bases on the wayscript local files structure
 journal = "journals"
-t = os.listdir(journal)
-my_file = os.path.join(journal,t[-1])
-
-print(my_file)
-
-with open( my_file ,"a") as thought:
-    #x = ("{} first test frothon script".format(block))
-    pager = page_ref.format("bkdf")
-    x = ("{} this is the first page_ref {}".format(block,pager))
-    thought.write(x)
-    page_file_name = pager[2:-2]
-    #page refs are not made intill typing in to
-
-    """
-    script will ask if adding a page ref and store it
-
-    or
-
-    or just use __blah__ then page_ref at the end of the     
-    """
-
-time.sleep(3)
-#########################################################
-# bases on the wayscript local files structure
 page = "pages"
-#t = os.listdir(page)
-my_file_page = os.path.join(page,page_file_name+".md")
 
+# the only thing left is to make a fuzzy finder for the files and know file i want to add to
 
-print(my_file_page)
+def journal_entry():
+    t = os.listdir(journal)
+    my_file = os.path.join(journal,t[-1])
+    print(my_file)
+    with open( my_file ,"a") as thought:
+        print("write your thought:")
+        #input_string =("{}first test from the script with athena help [[chatGPT]]".format(block))
+        input_string = input("{}".format(block))
+        thought.write(input_string)
+    time.sleep(3)
+    return my_journal_refs(input_string)
 
-with open( my_file_page ,"a") as thought:
-    x = ("\b{} first test frothon script".format(block))
-    thought.write(x)
+def my_journal_refs(input_string): # the jounal string
+    start_index = input_string.index("[[") + 2
+    end_index = input_string.index("]]")
+    word = input_string[start_index:end_index]
+    my_file = os.path.join(page,word + ".md")
+    with open(my_file ,"w") as file:
+        print("write a note:")
+        x = input("{}".format(block))
+        file.write(x)
+    print(f"{word}.md created successfully!")
+
+journal_entry()
